@@ -34,7 +34,13 @@
   </div>
   <div class="overlay" ></div>
 
+  <div class="button-container">
+    <button class="sort-button" id="sortAscBtn">Сортировать по возрастанию</button>
+    <button class="sort-button" id="sortDescBtn">Сортировать по убыванию</button>
+    <button id="sortPriorityBtn" class="sort-button">Сортировка по приоритету</button>
+  </div>
 
+  <div class="columns-container">
   <div class="column" id="tasks">
     <h2>Tasks</h2>
     <div class="add-task">
@@ -54,26 +60,34 @@
   <div class="column" id="completed">
     <h2>Completed</h2>
     <div class="add-task">
-
       <button onclick="openModal('completed')">Add Task</button>
     </div>
     <div class="tasks"ondrop="drop(event)" ondragover="allowDrop(event)"></div>
   </div>
+</div>
 
-  <dialog id="task-modal">
-    <p>Enter Task Name:</p>
-    <input type="text" id="task-input" placeholder="New task">
-    <div class="modal-buttons">
-      <div class="add-task">
+<dialog id="task-modal">
+  <p>Enter Task Name:</p>
+  <input type="text" id="task-input" placeholder="New task">
+  <p>Select Priority:</p>
+  <select id="task-priority">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+  </select>
+  <div class="modal-buttons">
+    <div class="add-task">
       <button onclick="addTask()">Add</button>
     </div>
-      <div class="add-task">
+    <div class="add-task">
       <button onclick="closeModal()">Cancel</button>
     </div>
-    </div>
-  </dialog>
+  </div>
+</dialog>
 
-  <script src="Scripts/script.js" defer></script>
+  <script src="scripts/script.js" defer></script>
   <script scr="bundle.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ body {
   font-family: "Bradley Hand", cursive;
   margin: 0;
   padding: 0;
-  display: flex;
+
   gap: 20px;
   padding: 20px;
   background-color: black;
@@ -177,6 +177,46 @@ task.dragging {
     height: 80vh;
 }
 
+.task-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 90px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.task-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.columns-container {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.sort-button {
+  background-color: #3500d3;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sort-button:hover {
+  background-color: #240090;
+}
 
 
 .burger {
