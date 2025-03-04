@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="icon" href="assets\icons\cat-goyda.jpg" type="image/jpeg">
+</head>
+
+<body>
+  <div class="nav-panel">
+    <div class nav-logo-container>
+      <img src="assets/icons/papa-bear.jpg" alt="Logo" class="nav-logo">
+    </div>
+    <div class="burger" onclick="toggleMenu()">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <div class = "nav-buttons">
+      <button onclick="window.location.href='index.html'">Main</button>
+      <button disabled>Projects</button>
+      <button onclick="window.location.href='tasks.html'">Tasks</button>
+      <button onclick="window.location.href='about.html'">About</button>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <button onclick="window.location.href='index.html'">Main</button>
+    <button disabled>Projects</button>
+    <button onclick="window.location.href='tasks.html'">Tasks</button>
+    <button onclick="window.location.href='about.html'">About</button>
+  </div>
+  <div class="overlay" ></div>
+
+  <div class="center-image">
+      <img src="assets/icons/404-error.svg" alt="404 Error" class="error-image">
+  </div>
+  <script src="Scripts/script.js" defer></script>
+  <script scr="bundle.js"></script>
+</body>

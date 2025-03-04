@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Management</title>
+  <link rel="stylesheet" href="styles/style.css">
+  <link rel="icon" href="assets\icons\cat-goyda.jpg" type="image/jpeg">
+</head>
+
+<body>
+  <div class="nav-panel">
+    <div class nav-logo-container>
+      <img src="assets/icons/papa-bear.jpg" alt="Logo" class="nav-logo">
+    </div>
+    <div class="burger" onclick="toggleMenu()">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+    <div class = "nav-buttons">
+      <button onclick="window.location.href='index.html'">Main</button>
+      <button onclick="window.location.href='projects.html'">Projects</button>
+      <button disabled>Tasks</button>
+      <button onclick="window.location.href='about.html'">About</button>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <button onclick="window.location.href='index.html'">Main</button>
+    <button onclick="window.location.href='projects.html'">Projects</button>
+    <button disabled>Tasks</button>
+    <button onclick="window.location.href='about.html'">About</button>
+  </div>
+  <div class="overlay" ></div>
+
+
+  <div class="column" id="tasks">
+    <h2>Tasks</h2>
+    <div class="add-task">
+      <button onclick="openModal('tasks')">Add Task</button>
+    </div>
+    <div class="tasks"ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+  </div>
+
+  <div class="column" id="in-work">
+    <h2>In-work</h2>
+    <div class="add-task">
+      <button onclick="openModal('in-work')">Add Task</button>
+    </div>
+    <div class="tasks"ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+  </div>
+
+  <div class="column" id="completed">
+    <h2>Completed</h2>
+    <div class="add-task">
+
+      <button onclick="openModal('completed')">Add Task</button>
+    </div>
+    <div class="tasks"ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+  </div>
+
+  <dialog id="task-modal">
+    <p>Enter Task Name:</p>
+    <input type="text" id="task-input" placeholder="New task">
+    <div class="modal-buttons">
+      <div class="add-task">
+      <button onclick="addTask()">Add</button>
+    </div>
+      <div class="add-task">
+      <button onclick="closeModal()">Cancel</button>
+    </div>
+    </div>
+  </dialog>
+
+  <script src="Scripts/script.js" defer></script>
+  <script scr="bundle.js"></script>
+</body>
+</html>
