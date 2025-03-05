@@ -1,6 +1,7 @@
 let currentColumn = '';
     const modal = document.getElementById('task-modal');
     const input = document.getElementById('task-input');
+    const taskPriority = document.getElementById('task-priority').value;
 
     function openModal(column) {
       currentColumn = column;
@@ -23,39 +24,67 @@ function closeModal() {
         closeModal();
       }
     });
-
+    
     function addTask() {
-      const taskText = input.value.trim();
-      if (taskText) {
-        const taskDiv = createTaskElement(taskText);
-        document.querySelector(`#${currentColumn} .tasks`).appendChild(taskDiv);
+        const input = document.getElementById('task-input');
+        const taskText = input.value.trim();
+        const taskPriority = document.getElementById('task-priority').value;
+        if (!taskText) return;
+        
+        const taskElement = createTaskElement(taskText, taskPriority);
+        document.querySelector(`#${currentColumn} .tasks`).appendChild(taskElement);
         closeModal();
-      }
     }
+    
+    function createTaskElement(taskText, taskPriority) {
+        const taskDiv = document.createElement('div');
+        taskDiv.className = 'task';
+        taskDiv.draggable = true;
+        taskDiv.setAttribute('data-priority', taskPriority);
+        taskDiv.addEventListener('dragstart', drag);
+        taskDiv.addEventListener('dragend', dragEnd);
 
-function createTaskElement(taskText) {
-      const taskDiv = document.createElement('div');
-      taskDiv.className = 'task';
-      taskDiv.draggable = true;
-      taskDiv.addEventListener('dragstart', drag);
-      taskDiv.addEventListener('dragend', dragEnd);
-      
-      const textSpan = document.createElement('span');
-      textSpan.textContent = taskText;
-      
-      const deleteBtn = document.createElement('button');
-      deleteBtn.className = 'delete-btn';
-      deleteBtn.innerHTML = `🗑️`;
-      deleteBtn.onclick = function() {
-        taskDiv.remove();
-      };
-      
-      taskDiv.appendChild(textSpan);
-      taskDiv.appendChild(deleteBtn);
-      
-      return taskDiv;
-}
+        const taskContent = document.createElement('div');
+        taskContent.style.display = 'flex';
+        taskContent.style.alignItems = 'right';
+    
+        const prioritySpan = document.createElement('span');
+        prioritySpan.textContent = taskPriority;
+        prioritySpan.className = 'priority';
+        prioritySpan.style.right = '10px';
+        prioritySpan.style.position = 'relative';
+    
+        const textSpan = document.createElement('span');
+        textSpan.textContent = taskText;
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.innerHTML = `🗑️`;
+        deleteBtn.onclick = function() {
+            taskDiv.remove();
+        };
 
+        taskContent.appendChild(prioritySpan);
+        taskContent.appendChild(deleteBtn);
+    
+        taskDiv.appendChild(textSpan);
+        taskDiv.appendChild(taskContent);
+        return taskDiv;
+    }
+    
+    function sortByPriority() {
+        document.querySelectorAll('.column').forEach(column => {
+            const tasksContainer = column.querySelector('.tasks');
+            const tasks = Array.from(tasksContainer.children);
+            
+            tasks.sort((a, b) => {
+                return Number(a.getAttribute('data-priority')) - Number(b.getAttribute('data-priority'));
+            });
+    
+            tasks.forEach(task => tasksContainer.appendChild(task));
+        });
+    }
+    
 function allowDrop(event) {
     event.preventDefault();
     const targetTask = event.target.closest('.task');
@@ -106,7 +135,7 @@ function toggleMenu() {
   
     if (!burger || !navLinks || !overlay) return; // Если элементов нет — ничего не делать
 
-    overlay.addEventListener('escape', () => {
+    overlay.addEventListener('click', () => {
       navLinks.classList.remove('nav-active');
       burger.classList.remove('toggle');
       overlay.style.display = 'none'; // Hide overlay
@@ -115,3 +144,46 @@ function toggleMenu() {
     burger.addEventListener("click", toggleMenu);
     overlay.addEventListener("click", toggleMenu);
   });
+
+  function getTaskList(status) {
+    return {
+        'tasks': elements.tasksList,
+        'in-work': elements.inWorkList,
+        'completed': elements.completed
+    }[status];
+}
+
+document.getElementById('sortAscBtn').addEventListener('click', () => sortTasks(true));
+document.getElementById('sortDescBtn').addEventListener('click', () => sortTasks(false));
+document.getElementById('sortPriorityBtn').addEventListener('click', sortByPriority);
+
+function sortTasks(isAscending) {
+    document.querySelectorAll('.column').forEach(column => {
+        const tasksContainer = column.querySelector('.tasks');
+        const tasks = Array.from(tasksContainer.children);
+        
+        tasks.sort((a, b) => {
+            return isAscending 
+                ? a.textContent.localeCompare(b.textContent)
+                : b.textContent.localeCompare(a.textContent);
+        });
+
+        tasks.forEach(task => tasksContainer.appendChild(task));
+    });
+}
+
+
+function refreshTaskBoard() {
+    // Очищаем все колонки
+    elements.todoList.innerHTML = '';
+    elements.inProgressList.innerHTML = '';
+    elements.doneList.innerHTML = '';
+
+    // Перебираем и добавляем задачи в соответствующие колонки снова
+    tasks.forEach(addTaskToBoard);
+}
+
+// Загрузка задач при загрузке страницы
+window.onload = () => {
+    tasks.forEach(addTaskToBoard);
+};
