@@ -272,7 +272,7 @@ task.dragging {
   right: -100%;
   width: 100%;
   height: 100%;
-  background-color: rgba(173, 216, 230, 0.9);
+  background-color: rgba(18, 23, 34, 0.95);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -302,23 +302,24 @@ task.dragging {
 }
 
 .nav-links button {
-  background-color: #240090; /* Темно-синий цвет */
-  color: white; /* Белый текст */
-  border: none; /* Убрать границы */
-  padding: 12px 24px; /* Отступы внутри кнопок */
-  border-radius: 8px; /* Скругленные углы */
-  font-size: 18px; /* Размер шрифта */
-  cursor: pointer; /* Изменение курсора при наведении */
+  background-color: #240090; 
+  color: white; 
+  border: none; 
+  padding: 12px 24px; 
+  border-radius: 8px; 
+  font-size: 18px; 
+  cursor: pointer; 
   transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 80%;
 }
 
 .nav-links button:hover {
-  background-color: #3500d3; /* Светлее при наведении */
-  transform: scale(1.05); /* Легкое увеличение при наведении */
+  background-color: #3500d3; 
+  transform: scale(1.05); 
 }
 
 .nav-links button:disabled {
-  background-color: gray; /* Серый цвет для неактивных кнопок */
+  background-color: gray; 
   cursor: default;
 }
 

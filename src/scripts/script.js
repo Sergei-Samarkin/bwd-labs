@@ -24,19 +24,55 @@ function closeModal() {
         closeModal();
       }
     });
-    
-    function addTask() {
-        const input = document.getElementById('task-input');
-        const taskText = input.value.trim();
-        const taskPriority = document.getElementById('task-priority').value;
-        if (!taskText) return;
+function saveTasks() {
+    const columns = document.querySelectorAll(".column");
+    const tasksData = {};
+
+    columns.forEach(column => {
+        const columnId = column.id;
+        const tasks = column.querySelectorAll(".task");
+        tasksData[columnId] = [];
+
+        tasks.forEach(task => {
+            tasksData[columnId].push({
+                text: task.querySelector("span:first-child").textContent,
+                priority: task.getAttribute("data-priority"),
+            });
+        });
+    });
+    localStorage.setItem("tasksData", JSON.stringify(tasksData));
+}
+
+function loadTasks() {
+    const tasksData = JSON.parse(localStorage.getItem("tasksData"));
+    if (!tasksData) return;
+
+    Object.keys(tasksData).forEach(columnId => {
+        const column = document.getElementById(columnId);
+        if (!column) return;
         
-        const taskElement = createTaskElement(taskText, taskPriority);
-        document.querySelector(`#${currentColumn} .tasks`).appendChild(taskElement);
-        closeModal();
-    }
+        const tasksContainer = column.querySelector(".tasks");
+        tasksData[columnId].forEach(task => {
+            const taskElement = createTaskElement(task.text, task.priority);
+            tasksContainer.appendChild(taskElement);
+        });
+    });
+}
+
+function addTask() {
+    const input = document.getElementById('task-input');
+    const taskText = input.value.trim();
+    const taskPriority = document.getElementById('task-priority').value;
+    if (!taskText) return;
     
-    function createTaskElement(taskText, taskPriority) {
+    const taskElement = createTaskElement(taskText, taskPriority);
+    document.querySelector(`#${currentColumn} .tasks`).appendChild(taskElement);
+    saveTasks();
+    closeModal();
+}
+
+ 
+function createTaskElement(taskText, taskPriority) {
         const taskDiv = document.createElement('div');
         taskDiv.className = 'task';
         taskDiv.draggable = true;
@@ -62,6 +98,7 @@ function closeModal() {
         deleteBtn.innerHTML = `🗑️`;
         deleteBtn.onclick = function() {
             taskDiv.remove();
+            saveTasks();
         };
 
         taskContent.appendChild(prioritySpan);
@@ -70,19 +107,6 @@ function closeModal() {
         taskDiv.appendChild(textSpan);
         taskDiv.appendChild(taskContent);
         return taskDiv;
-    }
-    
-    function sortByPriority() {
-        document.querySelectorAll('.column').forEach(column => {
-            const tasksContainer = column.querySelector('.tasks');
-            const tasks = Array.from(tasksContainer.children);
-            
-            tasks.sort((a, b) => {
-                return Number(a.getAttribute('data-priority')) - Number(b.getAttribute('data-priority'));
-            });
-    
-            tasks.forEach(task => tasksContainer.appendChild(task));
-        });
     }
     
 function allowDrop(event) {
@@ -129,7 +153,8 @@ function toggleMenu() {
 }
 
 
-  document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
+
     const burger = document.querySelector(".burger");
     const overlay = document.querySelector(".overlay");
   
@@ -170,20 +195,41 @@ function sortTasks(isAscending) {
 
         tasks.forEach(task => tasksContainer.appendChild(task));
     });
+    saveTasks();
+}
+
+function sortByPriority() {
+    document.querySelectorAll('.column').forEach(column => {
+        const tasksContainer = column.querySelector('.tasks');
+        const tasks = Array.from(tasksContainer.children);
+            
+        tasks.sort((a, b) => {
+            return Number(a.getAttribute('data-priority')) - Number(b.getAttribute('data-priority'));
+        });
+    
+        tasks.forEach(task => tasksContainer.appendChild(task));
+    });
+    saveTasks();
 }
 
 
-function refreshTaskBoard() {
-    // Очищаем все колонки
-    elements.todoList.innerHTML = '';
-    elements.inProgressList.innerHTML = '';
-    elements.doneList.innerHTML = '';
 
-    // Перебираем и добавляем задачи в соответствующие колонки снова
-    tasks.forEach(addTaskToBoard);
+function loadTasks() {
+    const tasksData = JSON.parse(localStorage.getItem("tasksData"));
+    if (!tasksData) return;
+
+    Object.keys(tasksData).forEach(columnId => {
+        const tasksContainer = document.querySelector(`#${columnId} .tasks`);
+        if (!tasksContainer) return;
+
+        tasksContainer.innerHTML = ""; // Очистка перед вставкой задач
+        tasksData[columnId].forEach(task => {
+            const taskElement = createTaskElement(task.text, task.priority);
+            tasksContainer.appendChild(taskElement);
+        });
+    });
 }
 
-// Загрузка задач при загрузке страницы
-window.onload = () => {
-    tasks.forEach(addTaskToBoard);
-};
+
+// Call loadTasks on page load
+document.addEventListener('DOMContentLoaded', loadTasks);
